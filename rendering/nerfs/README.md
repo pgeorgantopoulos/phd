@@ -1,12 +1,12 @@
-# NeRFs and variants
+# Neural Rediance Fields
 
 ## NeRFs
 
-represent a 3D scene using Radiance Fields. Given enough images of the same scene, the model outputs new images of the same scene from different viewpoints.
+Represent a 3D scene using Radiance Fields. Given enough images of the same scene, the model outputs new images of the same scene from different viewpoints.
 
 ### Model
 
-Radiance Fields use a ray $\pmb{r}(t)$ traced from the camera through the image plane and the scene $[t_n,t_f]$. The color of the ascociated pixel is modeled as an integral function of the volume density of that ray.
+Radiance Fields model the volume of the scene using rays $\pmb{r}(t)$ starting from the POV traversing the image plane and the scene $[t_n,t_f]$. For each ray, the color of the pixel that it goes through is modeled as an integral function of the volume density of that ray.
 
 $$
 C(\pmb{r}(t)) = \int_{t_n}^{t_f} \exp\Big(- \int_{t_n}^{t} \sigma(\pmb{r}(s))~ds \Big)~\sigma(\pmb{r}(t))~\pmb{c}(\pmb{r}(t),\pmb{d})~dt
@@ -14,13 +14,15 @@ $$
 
 ![nerf](nerf.png)
 
+The integral is approximated by sampling points along each ray.
+
 ### Training
 
-INPUT: 3D point in scene + camera direction wrt scene center $d$
+**INPUT**: 3D point coordinates + camera viewing direction $d$
 
-OUTPUT: RGB image
+**OUTPUT**: 2D RGB image
 
-LOSS:
+**LOSS**:
 $$
 \mathcal{L} = \sum_{\pmb{r}} \| \hat C (\pmb r) - C (\pmb r) \|_2^2
 $$
@@ -31,17 +33,19 @@ T(\pmb{r}(t)) = \exp\Big(- \int_{t_n}^{t} \sigma(\pmb{r}(s))~ds \Big)
 $$
 -->
 
-#### Volume density fro multi-view
+### Concept
 
-We have a multi-view model, that means two non-parallel rays (ray1, ray2) from two different views concide at some point within the scene. This point might be visible from ray2, but not ray1. Which means volume density or ray1 depends on information from ray2.
+#### Volume density for multi-view
 
----
+For the same scene two non-parallel rays - ray1, ray2 - from two seperate views meet at some point within the scene. Consequently, with Radiance Field modeling, two views contain overlapping volumetric information. 
+In fact, each point corresponds to multiple rays of separate views, which is why it's possible to estimate a novel ray without
+
 Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., & Ng, R. (2021). Nerf: Representing scenes as neural radiance fields for view synthesis. Communications of the ACM, 65(1), 99-106.
 
 ## Physics Augmented Continuum NERFs
 
 PAC-NeRFs model moving objects in a static scene using 
-a dynamical radiance field, avoiding geometric priors.
+a dynamical radiance field, without using geometric priors.
 Faster rendering than NERFS using Eulerian representation.
 Cameras are static wrt the scene and static objects/background are removed.
  (Minivan for 4 passengers plus 7 luggage) while the total cost amounts to 450 euros by choosing one of the follow payment methods

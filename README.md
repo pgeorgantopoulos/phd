@@ -4,24 +4,31 @@ This is my PhD.
 
 ## Study material
 
-[ResearchRabbit collection](https://www.researchrabbitapp.com/collection/public/R6DEKN5RLP)
-
 [PINNs](https://github.com/pgeorgantopoulos/pinns)
 
 [NERFs](nerfs/README.md)
 
-## TURING
+[DDPMs](ddpm/README.md)
 
-[SOTA](https://www.researchrabbitapp.com/collection/public/E6XJ0W79LG)
+[CMU-Physics Based Rendering](https://graphics.cs.cmu.edu/courses/15-468/index.html)
 
-[Zotero Arampatzis](https://www.zotero.org/groups/6123567/turing/items/ENWLF3L2/item-list)
+[CMU-Learning for 3D Vision](https://learning3d.github.io/schedule.html)
 
-[directory](https://github.com/pgeorgantopoulos/turing).
+[OpenCV-3DGS](https://learnopencv.com/3d-gaussian-splatting/) https://github.com/spmallick/learnopencv/tree/master/3D-Gaussian-Splatting-Code
+
+[3DGStutorial](https://3dgstutorial.github.io/)
+
+[OpenCV-Annotated NeRF](https://learnopencv.com/annotated-nerf-pytorch/)
+
+[Monte Carlo](https://geometrycollective.github.io/monte-carlo/mcma-fa2023.html)
 
 [*"Multiple View Geometry in ComputerVision"*, Zisserman, 2003](https://www.r-5.org/files/books/computers/algo-list/image-processing/vision/Richard_Hartley_Andrew_Zisserman-Multiple_View_Geometry_in_Computer_Vision-EN.pdf)
 
-6d pose estimation
+[COLMAP](https://colmap.github.io/)
 
-SLAM
 
-COLMAP
+## TURING
+
+[Zotero Group](https://www.zotero.org/groups/6123567/turing/items/ENWLF3L2/item-list)
+
+[Repository](https://github.com/pgeorgantopoulos/turing).
