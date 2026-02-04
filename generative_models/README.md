@@ -113,7 +113,7 @@ $$
 \mathcal{L}(\theta) = \mathbb{E}_{t,x_0,\epsilon} \Big[ \| \epsilon - \epsilon_{\theta}(\sqrt{\bar\alpha_t} x_0 + \sqrt{1-\bar\alpha_t}\epsilon,~t) \|^2 \Big]
 $$
 
-\* While the above loss is emperically better. The original rationale was to make assumptions on $\sigma_{\theta}$ and $x_t(x_0,\epsilon)$ and compute a different loss. 
+\* this loss is derived after assumptions on $\sigma_{\theta}$ and $x_t(x_0,\epsilon)$. 
 
 
 
