@@ -31,7 +31,7 @@ VAEs (<https://arxiv.org/pdf/1312.6114>) **propose**: sample from a $p_{z|x;\phi
 $$
 \begin{align}
 
-\mathcal{L(\phi,\theta;x)} &= \int p_{z|x;\phi} \log(p_{x|z;\theta})~ dz - \int p_{z|x;\phi} \log\Big(\dfrac{p_{z|x;\phi}}{p_{z;\theta}}\Big)~ dz\\
+\mathcal{L}(\phi,\theta;x) &= \int p_{z|x;\phi} \log(p_{x|z;\theta})~ dz - \int p_{z|x;\phi} \log\Big(\dfrac{p_{z|x;\phi}}{p_{z;\theta}}\Big)~ dz\\
 & = \mathbb{E}_{ p_{z|x;\phi} } \Big[ \log(p_{x|z;\theta}) \Big] + D_{KL}\Big( p_{z|x;\phi}, p_{z;\theta} \Big)
 
 \end{align}
@@ -73,7 +73,7 @@ which we can think as applying a Gaussian kernel on each sample $z$.
 
 ## Denoising Diffusion Probabilistic Models
 
-DDPM (<https://arxiv.org/pdf/2006.11239>) instead of better choosing $p_z$, propose structuring $p_x$ and consequently $f_{\theta}$. Specifically as a *Markov Chain* with a Gaussian step  
+DDPM (<https://arxiv.org/pdf/2006.11239>) instead of better choosing $p_z$, propose structuring $p_x$ and consequently $f_{\theta}$. Specifically as a *Markov Chain* with a Gaussian step. Another way to think of DDPM is that it replaces $\mathcal{Z}$ with $\mathcal{X}$. Instead of $p_{z|x;\phi}$ we have the predetermined (needs no training) forward model $p_{x_{t}|x_{t-1}}$. The **Denoiser** (used to be *Decoder*) implements the backward model $p_{x_{t-1}|x_{t};\theta}$ instead of $p_{x|z;\theta}$.
 
 $$
 p_{x_0;\theta} = p_{x_T}\prod_{t=0}^{T-1} p_{x_t|x_{t+1};\theta}
@@ -95,11 +95,28 @@ $$
 f_{\theta}: \mathcal{T}\times\mathcal{Z} \rightarrow \mathcal{X}
 $$
 
-which is optimized as in VAE, by maximizing the ELBO of the likelihood $p_{x|z;\theta}$, $\mathcal{L(\theta;x)}$. Only now, there is no approximation of $p_{z|x}$.
+which is optimized as in VAE, by maximizing the ELBO of the likelihood $p_{x|z;\theta}$, $\mathcal{L}(\theta;x)$. Only now, there is no approximation of $p_{z|x}$.
 
 $$
-\mathcal{L(\theta;x)} = \int p_{x_t|x_{t-1}} \Big[ p_{x_T|} + \sum\limits_{t=0}^{T-1} \log\Big(\dfrac{p_{x_t|x_{t+1};\theta}}{p_{x_t|x_{t-1}}}\Big)\Big]~ dz
+\mathcal{L}(\theta;x) = \int p_{x_t|x_{t-1}} \Big[ p_{x_T} + \sum\limits_{t=0}^{T-1} \log\Big(\dfrac{p_{x_t|x_{t+1};\theta}}{p_{x_t|x_{t-1}}}\Big)\Big]~ dx_t
 $$
+
+Remember, the original generative problem requires sampling from $\mathcal{X}$. DDPM allows for sampling from $\mathcal{X}$ at any $t$, since it can be shown that
+
+$$
+p_{x_t|x_0} = \mathcal{N}\Big(x_t; \sqrt{\bar \alpha_t} x_0, (1 − \bar \alpha_t)\Big),\quad \bar\alpha_t:=\prod_s^t\alpha_s, \quad \alpha_t := 1-\beta_t
+$$
+
+That enables constraining the loss function per $t$-step, as follows
+
+$$
+\mathcal{L}(\theta) = \mathbb{E}_{t,x_0,\epsilon} \Big[ \| \epsilon - \epsilon_{\theta}(\sqrt{\bar\alpha_t} x_0 + \sqrt{1-\bar\alpha_t}\epsilon,~t) \|^2 \Big]
+$$
+
+\* While the above loss is emperically better. The original rationale was to make assumptions on $\sigma_{\theta}$ and $x_t(x_0,\epsilon)$ and compute a different loss. 
+
+
+
 
 <!-- ## Normalizing Flows
 
