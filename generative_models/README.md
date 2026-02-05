@@ -26,7 +26,7 @@ affect the "*expressivity*" of $p_{x|z;\theta}$ and therefore the marginal $p_{x
 
 ## Variational Autoencoders
 
-VAEs (<https://arxiv.org/pdf/1312.6114>) **propose**: sample from a $p_{z|x;\phi} \approx p_{z|x}$ which maximizes the marginal likelihood $p_{x;\theta}$, or at least its *Evidence Lower Bound* (ELBO)
+VAEs (https://arxiv.org/pdf/1312.6114) **propose**: sample from a $p_{z|x;\phi} \approx p_{z|x}$ which maximizes the marginal likelihood $p_{x;\theta}$, or at least its *Evidence Lower Bound* (ELBO)
 
 $$
 \mathcal{L}(\phi,\theta;x) = \int p_{z|x;\phi} \log(p_{x|z;\theta})~ dz - \int p_{z|x;\phi} \log\Big(\dfrac{p_{z|x;\phi}}{p_{z;\theta}}\Big)~ dz\\
@@ -68,7 +68,7 @@ which we can think as applying a Gaussian kernel on each sample $z$.
 
 ## Denoising Diffusion Probabilistic Models
 
-DDPM (<https://arxiv.org/pdf/2006.11239>) instead of better choosing $p_z$, propose structuring $p_x$ and consequently $f_{\theta}$. Specifically as a *Markov Chain* with a Gaussian step. Another way to think of DDPM is that it replaces $\mathcal{Z}$ with $\mathcal{X}$. Instead of $p_{z|x;\phi}$ we have the predetermined (needs no training) forward model $p_{x_{t}|x_{t-1}}$. The **Denoiser** (used to be *Decoder*) implements the backward model $p_{x_{t-1}|x_{t};\theta}$ instead of $p_{x|z;\theta}$.
+DDPM (https://arxiv.org/pdf/2006.11239) instead of better choosing $p_z$, propose structuring $p_x$ and consequently $f_{\theta}$. Specifically as a *Markov Chain* with a Gaussian step. Another way to think of DDPM is that it replaces $\mathcal{Z}$ with $\mathcal{X}$. Instead of $p_{z|x;\phi}$ we have the predetermined (needs no training) forward model $p_{x_{t}|x_{t-1}}$. The **Denoiser** (used to be *Decoder*) implements the backward model $p_{x_{t-1}|x_{t};\theta}$ instead of $p_{x|z;\theta}$.
 
 $$
 p_{x_0;\theta} = p_{x_T}\prod_{t=0}^{T-1} p_{x_t|x_{t+1};\theta}
@@ -123,7 +123,7 @@ $$
 2022 ["SCORE-BASED GENERATIVE MODELING"](https://openreview.net/pdf?id=CzceR82CYc)\
 2023 ["Discrete Langevin Samplers via Wasserstein Gradient Flow"](https://proceedings.mlr.press/v206/sun23f.html)
 
-Score-based models ( <https://proceedings.neurips.cc/paper_files/paper/2019/file/3001ef257407d5a371a96dcd947c7d93-Paper.pdf>) make use of **Langevin dynamics**  to explore samples within $\mathcal{X}$ (<https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf>)
+Score-based models make use of **Langevin dynamics** to explore samples within $\mathcal{X}$ ["Bayesian learning via stochastic gradient Langevin dynamics", (2011)](https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf).
 
 $$
 \dfrac{dx}{dt} = \nabla_x \log p_x + \dfrac{dz}{dt}
@@ -134,7 +134,7 @@ $\nabla_x \log p_x(x)$ is called the "**score**" of $p_x$.
 The *Euler–Maruyama* discretization of Langevin dynamics is
 
 $$
-\hat{x}_t = \hat{x}_{t-1} + \dfrac{\epsilon}{2} \nabla_x \log p_{\hat{x}_{t-1}} + \sqrt{\epsilon}z_{t},\quad z\sim\mathcal{N}(0,1)
+x_t = x_{t-1} + \dfrac{\epsilon}{2} \nabla_x \log p_{x_{t-1}} + \sqrt{\epsilon}z_{t},\quad z\sim\mathcal{N}(0,1)
 $$
 
 Therefore, the overall score-based methodology includes two steps: approximating $\nabla_x \log p_x$ and sampling.
@@ -143,23 +143,23 @@ Therefore, the overall score-based methodology includes two steps: approximating
 
 ["Estimation of non-normalized statistical models by score matching", (2005)](https://jmlr.org/papers/volume6/hyvarinen05a/hyvarinen05a.pdf)
 
-*Sliced score matching: A scalable approach to density and score estimation (2019)*
+["Sliced score matching: A scalable approach to density and score estimation", (2019)](https://proceedings.mlr.press/v115/song20a/song20a.pdf)
 
-For $\mathcal{L}(\theta)$ it holds (vector notation is ommited here):
+Here $\mathcal{L}(\theta)$ captures the direction of higher data density (notation is abused as we move to vector derivatives):
 
 $$
 \underset{\theta}{argmin}\ \mathcal{L}(\theta) = \underset{\theta}{argmin}\ \mathbb{E}_{p_x}\Big[ \| s_{\theta}(x) - \nabla_x \log p_x(x) \|^2 \Big] = \underset{\theta}{argmin}\ \mathbb{E}_{p_x}\Big[ \dfrac{1}{2} \| s_{\theta}(x) \|^2 + tr\big( \nabla_x s_{\theta}(x) \big) \Big]
 $$
 
-Computing $\dfrac{dp_x}{dx}$ is prohibiting for high-dimensional $x$. *A connection between score matching and denoising autoencoders (2011)* propose marginilizing $p_x$ to a knwon (Gaussian) $p_{\hat{x}} = \int p_{\hat{x}|x} p_x~ dx$
+Computing $\dfrac{dp_x}{dx}$ is prohibiting for high-dimensional $x$. ["A connection between score matching and denoising autoencoders", (2011)](https://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf) propose marginilizing $p_x$ to a knwon (Gaussian) $p_{\hat{x}} = \int p_{\hat{x}|x} p_x~ dx$
 
 $$
 \mathcal{L}(\theta) = \dfrac{1}{2} \mathbb{E}_{p_{\hat{x}|x}, p_x}\Big[ \| s_{\theta}(\hat x) - \nabla_{\hat x} \log p_{\hat{x}|x} \|^2 \Big]
 $$
 
-which is analytically proven to work for small perturbations (<https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf>).
+which is analytically proven to work for small perturbations ["Bayesian learning via stochastic gradient Langevin dynamics", (2011)](https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf).
 
-**Limitation**: Gradient information is zero where $\mathcal{X}$ is not dense. This is common in low-dimensinoal data, such as represesentations of physical systems. Score matching is analytically fails for the same reason.
+**Limitation**: Gradient information is zero where $\mathcal{X}$ doesn't admit any density. This is common in low-dimensional $x$ (e.g. physical systems). Score matching fails (analytically) for the same reason.
 
 
 
