@@ -8,7 +8,7 @@ $$
 x = f(z)
 $$
 
-where $f$ is a Universal Function Approximator (UFA). In practive $\f\$ is approximated by a Neural Network.
+where $f$ is a Universal Function Approximator (UFA). In common practice $f$ is approximated by a Neural Network (NN):
 
 $$
 f_\theta:\mathcal{Z} \rightarrow \mathcal{X}
@@ -115,6 +115,56 @@ $$
 
 \* this loss is derived after assumptions on $\sigma_{\theta}$ and $x_t(x_0,\epsilon)$. 
 
+## Score-based Generative Models
+
+
+1908 ["Langevin dynamics"](https://en.wikipedia.org/wiki/Langevin_dynamics) \
+2002 [Langevin-dynamics: Sampling with gradient-based Markov Chain Monte Carlo approaches](https://github.com/alisiahkoohi/Langevin-dynamics)\
+2011 ["Bayesian Learning via Stochastic Gradient Langevin"](https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf)\
+2018 ["On sampling from a log-concave density using kinetic Langevin diffusions"](https://arxiv.org/abs/1807.09382) \
+2019 ["Generative Modeling by Estimating Gradients of the Data Distribution"](https://arxiv.org/abs/1907.05600) \
+2020 ["Generative Modeling with Denoising Auto-Encoders and Langevin Sampling"](https://arxiv.org/abs/2002.00107)\ 
+2021 ["Diffusion model"](https://en.wikipedia.org/wiki/Diffusion_model)\
+2022 ["SCORE-BASED GENERATIVE MODELING"](https://openreview.net/pdf?id=CzceR82CYc)\
+2023 ["Discrete Langevin Samplers via Wasserstein Gradient Flow"](https://proceedings.mlr.press/v206/sun23f.html)
+
+Score-based models ( <https://proceedings.neurips.cc/paper_files/paper/2019/file/3001ef257407d5a371a96dcd947c7d93-Paper.pdf>) make use of **Langevin dynamics**  to explore samples within $\mathcal{X}$ (<https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf>)
+
+$$
+\dfrac{dx}{dt} = \nabla_x \log p_x + \dfrac{dz}{dt}
+$$
+
+$\nabla_x \log p_x(x)$ is called the "**score**" of $p_x$. 
+
+The *Euler–Maruyama* discretization of Langevin dynamics is
+
+$$
+\hat{x}_t = \hat{x}_{t-1} + \dfrac{\epsilon}{2} \nabla_x \log p_{\hat{x}_{t-1}} + \sqrt{\epsilon}z_{t},\quad z\sim\mathcal{N}(0,1)
+$$
+
+Therefore, the overall score-based methodology includes two steps: approximating $\nabla_x \log p_x$ and sampling.
+
+### Score matching 
+
+["Estimation of non-normalized statistical models by score matching", (2005)](https://jmlr.org/papers/volume6/hyvarinen05a/hyvarinen05a.pdf)
+
+*Sliced score matching: A scalable approach to density and score estimation (2019)*
+
+For $\mathcal{L}(\theta)$ it holds (vector notation is ommited here):
+
+$$
+\underset{\theta}{argmin}\ \mathcal{L}(\theta) = \underset{\theta}{argmin}\ \mathbb{E}_{p_x}\Big[ \| s_{\theta}(x) - \nabla_x \log p_x(x) \|^2 \Big] = \underset{\theta}{argmin}\ \mathbb{E}_{p_x}\Big[ \dfrac{1}{2} \| s_{\theta}(x) \|^2 + tr\big( \nabla_x s_{\theta}(x) \big) \Big]
+$$
+
+Computing $\dfrac{dp_x}{dx}$ is prohibiting for high-dimensional $x$. *A connection between score matching and denoising autoencoders (2011)* propose marginilizing $p_x$ to a knwon (Gaussian) $p_{\hat{x}} = \int p_{\hat{x}|x} p_x~ dx$
+
+$$
+\mathcal{L}(\theta) = \dfrac{1}{2} \mathbb{E}_{p_{\hat{x}|x}, p_x}\Big[ \| s_{\theta}(\hat x) - \nabla_{\hat x} \log p_{\hat{x}|x} \|^2 \Big]
+$$
+
+which is analytically proven to work for small perturbations (<https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf>).
+
+**Limitation**: Gradient information is zero where $\mathcal{X}$ is not dense. This is common in low-dimensinoal data, such as represesentations of physical systems. Score matching is analytically fails for the same reason.
 
 
 

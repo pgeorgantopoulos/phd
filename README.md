@@ -22,7 +22,7 @@ This is my PhD.
 
 [Monte Carlo](https://geometrycollective.github.io/monte-carlo/mcma-fa2023.html)
 
-[*"Multiple View Geometry in ComputerVision"*, Zisserman, 2003](https://www.r-5.org/files/books/computers/algo-list/image-processing/vision/Richard_Hartley_Andrew_Zisserman-Multiple_View_Geometry_in_Computer_Vision-EN.pdf)
+["Multiple View Geometry in ComputerVision", Zisserman, 2003](https://www.r-5.org/files/books/computers/algo-list/image-processing/vision/Richard_Hartley_Andrew_Zisserman-Multiple_View_Geometry_in_Computer_Vision-EN.pdf)
 
 [COLMAP](https://colmap.github.io/)
 
@@ -31,4 +31,4 @@ This is my PhD.
 
 [Zotero Group](https://www.zotero.org/groups/6123567/turing/items/ENWLF3L2/item-list)
 
-[Repository](https://github.com/pgeorgantopoulos/turing).
+[Github](https://github.com/pgeorgantopoulos/turing)
