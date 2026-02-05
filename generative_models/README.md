@@ -29,12 +29,8 @@ affect the "*expressivity*" of $p_{x|z;\theta}$ and therefore the marginal $p_{x
 VAEs (<https://arxiv.org/pdf/1312.6114>) **propose**: sample from a $p_{z|x;\phi} \approx p_{z|x}$ which maximizes the marginal likelihood $p_{x;\theta}$, or at least its *Evidence Lower Bound* (ELBO)
 
 $$
-\begin{align}
-
-\mathcal{L}(\phi,\theta;x) &= \int p_{z|x;\phi} \log(p_{x|z;\theta})~ dz - \int p_{z|x;\phi} \log\Big(\dfrac{p_{z|x;\phi}}{p_{z;\theta}}\Big)~ dz\\
-& = \mathbb{E}_{ p_{z|x;\phi} } \Big[ \log(p_{x|z;\theta}) \Big] + D_{KL}\Big( p_{z|x;\phi}, p_{z;\theta} \Big)
-
-\end{align}
+\mathcal{L}(\phi,\theta;x) = \int p_{z|x;\phi} \log(p_{x|z;\theta})~ dz - \int p_{z|x;\phi} \log\Big(\dfrac{p_{z|x;\phi}}{p_{z;\theta}}\Big)~ dz\\
+= \mathbb{E}_{ p_{z|x;\phi} } \Big[ \log(p_{x|z;\theta}) \Big] + D_{KL}\Big( p_{z|x;\phi}, p_{z;\theta} \Big)
 $$
 
 <!-- where
@@ -54,11 +50,10 @@ $$
 Let $\hat{x} = \mathcal{D}(z;\theta)$ and $z = \mathcal{E}(x;\phi)$ where $X\sim p(x)$ and $p_{\theta,\phi}(\hat{x})$ its estimated density through a Encoder-Decoder schema.
 
 $$
-\begin{aligned}
-
-log ~p(x) \approx log ~p_{\theta,\phi}(\hat{x}) &= E_{q_{\phi}(x)}[ log ~p_{\theta,\phi}(\hat{x}) ] = E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)}{p_{\theta}(z|x)} ] = E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)q_{\phi}(z|x)}{p_{\theta}(z|x)q_{\phi}(z|x)} ]\\ &= E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)}{q_{\phi}(z|x)}] + E_{q_{\phi}(x)}[ log~\dfrac{q_{\phi}(z|x)}{p_{\theta}(z|x)} ]
-
-\end{aligned}
+log ~p(x) \approx log ~p_{\theta,\phi}(\hat{x}) = E_{q_{\phi}(x)}[ log ~p_{\theta,\phi}(\hat{x}) ] = E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)}{p_{\theta}(z|x)} ] = E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)q_{\phi}(z|x)}{p_{\theta}(z|x)q_{\phi}(z|x)} ]\\ 
+$$
+$$
+= E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)}{q_{\phi}(z|x)}] + E_{q_{\phi}(x)}[ log~\dfrac{q_{\phi}(z|x)}{p_{\theta}(z|x)} ]
 $$
 
 where $p_{\theta}(z|x)p(x) = p_{\theta}(x|z)p(z)$.~
