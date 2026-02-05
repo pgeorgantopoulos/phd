@@ -54,11 +54,11 @@ $$
 Let $\hat{x} = \mathcal{D}(z;\theta)$ and $z = \mathcal{E}(x;\phi)$ where $X\sim p(x)$ and $p_{\theta,\phi}(\hat{x})$ its estimated density through a Encoder-Decoder schema.
 
 $$
-\begin{align}
+\begin{aligned}
 
 log ~p(x) \approx log ~p_{\theta,\phi}(\hat{x}) &= E_{q_{\phi}(x)}[ log ~p_{\theta,\phi}(\hat{x}) ] = E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)}{p_{\theta}(z|x)} ] = E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)q_{\phi}(z|x)}{p_{\theta}(z|x)q_{\phi}(z|x)} ]\\ &= E_{q_{\phi}(x)}[ log ~\dfrac{p_{\theta,\phi}(\hat{x},z)}{q_{\phi}(z|x)}] + E_{q_{\phi}(x)}[ log~\dfrac{q_{\phi}(z|x)}{p_{\theta}(z|x)} ]
 
-\end{align}
+\end{aligned}
 $$
 
 where $p_{\theta}(z|x)p(x) = p_{\theta}(x|z)p(z)$.~
