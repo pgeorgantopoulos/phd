@@ -110,6 +110,12 @@ $$
 
 \* this loss is derived after assumptions on $\sigma_{\theta}$ and $x_t(x_0,\epsilon)$. 
 
+Sampling is then performed by
+
+$$
+x_{i-1} = \dfrac{1}{\sqrt{1-\beta_i}}\big(x_i + \beta_i\epsilon_{\theta}(x_i,i)\big) + \sqrt{\beta_i}\epsilon_i,\quad i=N,\dots,1
+$$
+
 ## Score-based Generative Models
 
 
@@ -131,7 +137,7 @@ $$
 
 $\nabla_x \log p_x(x)$ is called the "**score**" of $p_x$. 
 
-The *Euler–Maruyama* discretization of Langevin dynamics is
+The *Euler–Maruyama* **discretization** of Langevin dynamics is
 
 $$
 x_t = x_{t-1} + \dfrac{\epsilon}{2} \nabla_x \log p_{x_{t-1}} + \sqrt{\epsilon}z_{t},\quad z\sim\mathcal{N}(0,1)
@@ -151,17 +157,51 @@ $$
 \underset{\theta}{argmin}\ \mathcal{L}(\theta) = \underset{\theta}{argmin}\ \mathbb{E}_{p_x}\Big[ \| s_{\theta}(x) - \nabla_x \log p_x(x) \|^2 \Big] = \underset{\theta}{argmin}\ \mathbb{E}_{p_x}\Big[ \dfrac{1}{2} \| s_{\theta}(x) \|^2 + tr\big( \nabla_x s_{\theta}(x) \big) \Big]
 $$
 
-Computing $\dfrac{dp_x}{dx}$ is prohibiting for high-dimensional $x$. ["A connection between score matching and denoising autoencoders", (2011)](https://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf) propose marginilizing $p_x$ to a knwon (Gaussian) $p_{\hat{x}} = \int p_{\hat{x}|x} p_x~ dx$
+**Limitation**: Gradient information is zero where $\mathcal{X}$ doesn't admit any density. This is common in low-dimensional $x$ (e.g. physical systems). Score matching fails (analytically) for the same reason.
+
+**Limitation**: Computing $\dfrac{dp_x}{dx}$ is prohibiting for high-dimensional $x$.
+
+["A connection between score matching and denoising autoencoders", (2011)](https://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf) propose marginilizing $p_x$ to a knwon (Gaussian) $p_{\hat{x}} = \int p_{\hat{x}|x} p_x~ dx$
 
 $$
 \mathcal{L}(\theta) = \dfrac{1}{2} \mathbb{E}_{p_{\hat{x}|x}, p_x}\Big[ \| s_{\theta}(\hat x) - \nabla_{\hat x} \log p_{\hat{x}|x} \|^2 \Big]
 $$
 
-which is analytically proven to work for small perturbations ["Bayesian learning via stochastic gradient Langevin dynamics", (2011)](https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf).
+$$
+= \sum\limits_{i=1}^{N} \sigma_i^2 \mathbb{E}_{p(x)}\mathbb{E}_{p_{\hat x|x}} \Big[ \| s_{\theta}(\hat x,\sigma_i) - \nabla_{\hat x} \log p_{\hat x|x;\sigma_i} \|^2 \Big]
+$$
 
-**Limitation**: Gradient information is zero where $\mathcal{X}$ doesn't admit any density. This is common in low-dimensional $x$ (e.g. physical systems). Score matching fails (analytically) for the same reason.
+with $p_{\hat x|x} := \mathcal{N}(\hat x; x,\sigma^2I)$. This is analytically proven to work for small perturbations ["Bayesian learning via stochastic gradient Langevin dynamics", (2011)](https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf). $s_{\theta}(\hat x,\sigma)$ is called a **Noise Conditioned Score Network** (NCSN).
 
+The discretization from which we sample from then becomes
 
+$$
+x_i^m = x_{i}^{m-1} + \epsilon_i s_{\theta}(x_i^{m-1},\sigma_i) + \sqrt{2\epsilon_i}z_{t}^m,\quad i=1,\dots,N, m=1,\dots,M
+$$
+
+Note that M steps are required for a single sample $x_i$.
+
+### Score-based Generative Models with SDEs
+
+["Score-Based Generative Modeling through Stochastic Differential Equations", (2021)](https://arxiv.org/abs/2011.13456) consider 
+
+* the oringinal $It\hat o$-type SDE of Langevin dynamics.
+* the Noise Conditioned Score Network
+
+Sampling requires inverting the SDE wrt $t$, which is again an SDE *"Reverse-time diffusion equation models", (1982)* of the frorm
+
+$$
+\dfrac{dx}{dt} = \dfrac{d}{dt}\big[ f(x,t) - g(t)^2 \nabla_x \log p_{x;t} \big] + g(t)\dfrac{dz}{dt},\quad t\in[T,0]
+$$
+where $p_{x;T}$ is known
+
+??
+
+Sampling is done by numerically solving
+
+$$
+\dfrac{dx}{dt} = -\dfrac{1}{2} \beta(t)x + \sqrt{\beta(t)(1-\exp{-1\int_{0}^{t}\beta(s)~ds})} \dfrac{dz}{dt}
+$$
 
 <!-- ## Normalizing Flows
 
