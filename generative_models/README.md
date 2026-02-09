@@ -20,9 +20,7 @@ $$
 * the dimensional discrepancy of $z$ and $x$
 affect the "*expressivity*" of $p_{x|z;\theta}$ and therefore the marginal $p_{x;\theta}$ ("mode collapse").
 
-## Generative Adversarial Neural Networks
 
-??
 
 ## Variational Autoencoders
 
@@ -202,6 +200,30 @@ Sampling is done by numerically solving
 $$
 \dfrac{dx}{dt} = -\dfrac{1}{2} \beta(t)x + \sqrt{\beta(t)(1-\exp{-1\int_{0}^{t}\beta(s)~ds})} \dfrac{dz}{dt}
 $$
+
+## Generative Adversarial Neural Networks
+
+GANs aim to avoid likelihood optimization or enforcing some specific structure on a latent space. Instead, they minimize the **Jensen-Shannon Divergence**
+
+$$
+\underset{\phi}{\min}~ \underset{\theta}{\max} ~ \mathbb{E}_{p_x}\big[ log(D(x;\phi)) \big] + \mathbb{E}_{p_z}\big[ log(1-D(G(z;\theta);\phi)) \big]
+$$
+
+where the **Discriminator** $D$ learns a binomial likelihood of generated $x$ samples coming from $\mathcal{X}$ or not.
+
+**Limitation**: the expressivity of vanilla-GANs is limited to the main mode of $\mathcal{X}$. Often they converge to a local extremum where generated $x$'s are very similar to each other, however, more unlikely examples are never generated (aka *Mode Collapse*).
+
+### Wasserstein Loss
+
+To aleviate the mode-collapse, Wasserstein GANs discard the log and sigmoid functions and instead minimize
+
+$$
+\underset{\phi}{\min}~ \underset{\theta}{\max} ~ \mathbb{E}_{p_x}\big[ D(x;\phi) \big] + \mathbb{E}_{p_z}\big[ D(G(z;\theta);\phi) \big]
+$$
+
+which is linear wrt D and G, meaning gradients wrt $\theta$ are always non-zero, no matter how good $D$ is.
+
+
 
 <!-- ## Normalizing Flows
 
