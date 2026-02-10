@@ -203,26 +203,27 @@ $$
 
 ## Generative Adversarial Neural Networks
 
-GANs aim to avoid likelihood optimization or enforcing some specific structure on a latent space. Instead, they minimize the **Jensen-Shannon Divergence**
+GANs propose a different optimizing a different (binomial) conditional density: the likelihood of generated samples been drawn from $p_x$ or not. To accompany they optimize a *min-max* problem of the **Jensen-Shannon Divergence** between "fake" and "real" generated samples.
 
 $$
 \underset{\phi}{\min}~ \underset{\theta}{\max} ~ \mathbb{E}_{p_x}\big[ log(D(x;\phi)) \big] + \mathbb{E}_{p_z}\big[ log(1-D(G(z;\theta);\phi)) \big]
 $$
 
-where the **Discriminator** $D$ learns a binomial likelihood of generated $x$ samples coming from $\mathcal{X}$ or not.
+$D$ is called the **Discriminator**. Note that the latent space $\mathcal{Z}$ remains unstructured, meaning the generator's input are samples from any unconditioned prior of our choice.
 
-**Limitation**: the expressivity of vanilla-GANs is limited to the main mode of $\mathcal{X}$. Often they converge to a local extremum where generated $x$'s are very similar to each other, however, more unlikely examples are never generated (aka *Mode Collapse*).
+**Limitation**: the expressivity of vanilla-GANs is limited to the main mode of $p_x$. In other words, they converge to a local extremum where samples are very similar to each other (aka *Mode Collapse*).
+
+*(? One question is whether optimization of GAN loss is consistent with MLE optimization, as VAEs are?)*
 
 ### Wasserstein Loss
 
-To aleviate the mode-collapse, Wasserstein GANs discard the log and sigmoid functions and instead minimize
+To aleviate the mode-collapse, Wasserstein GANs discard the log and sigmoid functions to linearize the objective function and instead minimize
 
 $$
 \underset{\phi}{\min}~ \underset{\theta}{\max} ~ \mathbb{E}_{p_x}\big[ D(x;\phi) \big] + \mathbb{E}_{p_z}\big[ D(G(z;\theta);\phi) \big]
 $$
 
-which is linear wrt D and G, meaning gradients wrt $\theta$ are always non-zero, no matter how good $D$ is.
-
+Gradients wrt $\theta$ are always non-zero, no matter how good $D$ is.
 
 
 <!-- ## Normalizing Flows
