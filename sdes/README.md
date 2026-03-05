@@ -56,16 +56,29 @@ where the Generator $G$ produces $\hat{x}(t)$ as follows
 
 $$
 \hat{x}(t) = \alpha_{\theta} x(t) + \beta_{\theta}\\
+$$
+
+$$
 \dfrac{dx}{dt} = \mu(x(t),t;\theta) + \sigma(x(t),t;\phi)\dfrac{dw}{dt}\\
+$$
+
+$$
 h(0) = \xi_{\phi}(\hat{x}(0))
 $$
 
 and the discriminator $D$ produces $d$ based only on the last state of a respective SDE.
 
+$$ 
+d = m_{\phi} h(t) 
 $$
-d = m_{\phi} h(t)\\
-\dfrac{dh}{dt} = f(h(t),t;\phi) + g(h(t),t;\phi)\dfrac{d\hat {x}}{dt}\\
+
+$$
+\dfrac{dh}{dt} = f(h(t),t;\phi) + g(h(t),t;\phi)\dfrac{d\hat {x}}{dt}
+$$
+
+$$ 
 h(0) = \xi_{\phi}(\hat{x}(0))
 $$
 
-**Limitation**: Sparse time sampling
+**Limitation**: 
+
